@@ -12,6 +12,7 @@ import com.crisspian.fragment_guide_01.databinding.ActivityMainBinding;
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
+    private boolean isFragmentShow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +23,12 @@ public class MainActivity extends AppCompatActivity {
         binding.button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showFragment();
+                if (!isFragmentShow) {
+                    showFragment();
+                } else {
+                    closeFragment();
+                }
+
             }
         });
 
@@ -39,6 +45,20 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.add(R.id.content_fragment, firstFragment)
                 //.addToBackStack(null)
                 .commit();
+        isFragmentShow = true;
     }
+
+    private void closeFragment() {
+        //Obtener instancia del FragmentManager
+        FragmentManager mFragmentManager = getSupportFragmentManager();
+        FirstFragment mFirstFragment = (FirstFragment) mFragmentManager
+                .findFragmentById(R.id.content_fragment);
+        if (mFirstFragment != null) {
+            FragmentTransaction mFragmentTransaction = mFragmentManager.beginTransaction();
+            mFragmentTransaction.remove(mFirstFragment).commit();
+            isFragmentShow = false;
+        }
+    }
+
 
 }
